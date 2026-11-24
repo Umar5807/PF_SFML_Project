@@ -1,4 +1,5 @@
 
+
 #include <SFML/Graphics.hpp> // window,shapes , sprites, text
 #include <SFML/Audio.hpp>// music & sound effects 
 #include <fstream> // file reading/writing (high score)
@@ -498,15 +499,15 @@ void loadAudio()
     hasMusic = music.openFromFile("music.ogg");
     if (hasMusic)
     {
-        music.setLoop(true);         // repeat forever
-        music.setVolume(40);         // 0 = silent, 100 = full
+        music.setLoop(true);       
+        music.setVolume(40);       
     }
 
-    // --- flip sound effect (kept in memory) ---
+
     hasFlipSound = flipBuffer.loadFromFile("flip.wav");
     if (hasFlipSound)
     {
-        flipSound.setBuffer(flipBuffer);   // connect the sound to its data
+        flipSound.setBuffer(flipBuffer);  
         flipSound.setVolume(70);
     }
 }
@@ -514,7 +515,7 @@ void loadAudio()
 void startMusic()
 {
     if (hasMusic)
-        music.play();                // play() always starts from the beginning after stop()
+        music.play();                // to start player from begining
 }
 
 void stopMusic()
@@ -528,33 +529,30 @@ void playFlipSound(){
         flipSound.play();
 }
 int main(){
-    srand((unsigned)time(0));            // different random map every run
+    srand((unsigned)time(0));            
 
     sf::RenderWindow window(sf::VideoMode(WIN_W, WIN_H), "Gravity Flip Runner");
     window.setFramerateLimit(60);
     if (!loadFont())
-        return 1;                        // no font = can't draw text, so quit
-    loadBackground();                    // Chunk 1 (optional file)
-    loadPlayerAssets();                  // Chunk 2 (optional file)
-    loadAudio();                         // Chunk 2 (optional files)
+        return 1;
+    loadBackground();                  
+    loadPlayerAssets();                 
+    loadAudio();
 
     highScore = loadHighScore();
     clearTrack();
 
     GameState state = MENU;
     int menuChoice = 0;
-    sf::Clock clock;                     // measures time between frames
+    sf::Clock clock;                   
 
     while (window.isOpen())
     {
-        // dt = seconds since the last frame.Using dt makes the game run at the same speed on slow and fast computers
-        float dt = clock.restart().asSeconds();
-        if (dt > 0.05f) dt = 0.05f;      // safety: avoid huge jumps after lag
 
-        // EVENTS keyboard / window
+        float dt = clock.restart().asSeconds();
+        if (dt > 0.05f) dt = 0.05f;
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
 
@@ -583,10 +581,10 @@ int main(){
                 else if (state == PLAYING)
                 {
                     if (key == sf::Keyboard::Space)
-                        flipGravity();                 // Chunk 2
+                        flipGravity();               
                     else if (key == sf::Keyboard::Escape)
                     {
-                        stopMusic();                   // Chunk 2
+                        stopMusic();                  
                         state = MENU;
                     }
                 }
@@ -602,7 +600,7 @@ int main(){
                 }
             }
         }
-        // update game logic
+        // update  game 
         if (state == PLAYING)
         {
             updateGame(dt);
@@ -622,7 +620,7 @@ int main(){
         else if (state == INSTRUCTIONS) drawInstructions(window);
         else if (state == PLAYING)      drawScreen(window);
         else                            drawGameOver(window);
-        window.display();                // show the finished frame
+        window.display();                
     }
     return 0;
 }
