@@ -429,6 +429,179 @@
 //    ring.setPosition(PLAYER_X + CELL / 2.0f, playerY + CELL / 2.0f);
 //    window.draw(ring);
 //}
+//// ============================================================
+////  GRAVITY FLIP RUNNER   (C++ / SFML 2.6.2)
+////
+////  ########  CHUNK 2 of 3  -  PLAYER + AUDIO  ########
+////  Player mechanics (gravity flip, movement), player sprite, and audio.
+////
+////  PASTE THIS BELOW CHUNK 1 (it needs the includes, constants and
+////  globals that Chunk 1 already declared: CELL, PLAYER_X, CEIL_Y,
+////  FLOOR_Y, playerY, velocityY, gravityDown ...).
+////
+////  FILES USED (put them in the project folder, next to the .cpp):
+////    player.png   - ONE single image of the character (not a sprite sheet)
+////    music.ogg    - background music  (.ogg or .wav ONLY - SFML 2.6.2 can't read .mp3)
+////    flip.wav     - short sound when gravity flips
+////  If a file is missing, the game still works (cyan square / no sound).
+//// ============================================================
+//
+//// ------------------------------------------------------------
+////  PLAYER PHYSICS CONSTANTS
+//// ------------------------------------------------------------
+//const float GRAVITY = 3500;    // pixels / second^2  (how hard we get pulled)
+//const float MAX_VELOCITY = 1500;    // pixels / second    (speed limit)
+//
+//// ------------------------------------------------------------
+////  PLAYER SPRITE + AUDIO OBJECTS  (only Chunk 2 uses these)
+//// ------------------------------------------------------------
+//sf::Texture playerTexture;          // the image in memory
+//sf::Sprite  playerSprite;           // what we draw on screen
+//bool        hasPlayerSprite = false;
+//
+//sf::Music       music;              // long audio, streamed from disk
+//sf::SoundBuffer flipBuffer;         // short audio, loaded fully into memory
+//sf::Sound       flipSound;          // the "speaker" that plays flipBuffer
+//bool hasMusic = false;
+//bool hasFlipSound = false;
+//
+//
+//// ============================================================
+////  PLAYER MECHANICS
+//// ============================================================
+//
+//// Puts the player back on the floor for a new run
+//void resetPlayer()
+//{
+//    playerY = FLOOR_Y;
+//    velocityY = 0;
+//    gravityDown = true;
+//}
+//
+//// SPACE pressed: swap the direction of gravity
+//void flipGravity()
+//{
+//    gravityDown = !gravityDown;      // true <-> false
+//    playFlipSound();                 // little "whoosh" (does nothing if flip.wav is missing)
+//}
+//
+//// Called every frame. Gravity pulls the player toward the floor or ceiling.
+//void updatePlayer(float dt)
+//{
+//    float direction = gravityDown ? 1.0f : -1.0f;     // +1 = down, -1 = up
+//
+//    // gravity increases the speed a little every frame
+//    velocityY += direction * GRAVITY * dt;
+//    if (velocityY > MAX_VELOCITY) velocityY = MAX_VELOCITY;
+//    if (velocityY < -MAX_VELOCITY) velocityY = -MAX_VELOCITY;
+//
+//    // speed moves the player
+//    playerY += velocityY * dt;
+//
+//    // stop at the floor
+//    if (playerY >= FLOOR_Y)
+//    {
+//        playerY = FLOOR_Y;
+//        if (velocityY > 0) velocityY = 0;
+//    }
+//    // stop at the ceiling
+//    if (playerY <= CEIL_Y)
+//    {
+//        playerY = CEIL_Y;
+//        if (velocityY < 0) velocityY = 0;
+//    }
+//}
+//
+//
+//// ============================================================
+////  PLAYER SPRITE
+//// ============================================================
+//
+//// Tries to load player.png. Missing file = we draw a cyan square instead.
+//void loadPlayerAssets()
+//{
+//    if (playerTexture.loadFromFile("player.png"))
+//    {
+//        hasPlayerSprite = true;
+//        playerSprite.setTexture(playerTexture);
+//    }
+//}
+//
+//// Draws the player. When gravity is UP, the sprite is flipped upside down.
+//void drawPlayer(sf::RenderWindow& window)
+//{
+//    if (hasPlayerSprite)
+//    {
+//        // scale the image so it is exactly CELL x CELL pixels (40 x 40)
+//        float scaleX = (float)CELL / playerTexture.getSize().x;
+//        float scaleY = (float)CELL / playerTexture.getSize().y;
+//
+//        if (gravityDown)
+//        {
+//            playerSprite.setScale(scaleX, scaleY);
+//            playerSprite.setPosition(PLAYER_X, playerY);
+//        }
+//        else
+//        {
+//            // a NEGATIVE y-scale flips the picture upside down;
+//            // the sprite then grows upward, so we move it down by CELL
+//            playerSprite.setScale(scaleX, -scaleY);
+//            playerSprite.setPosition(PLAYER_X, playerY + CELL);
+//        }
+//        window.draw(playerSprite);
+//    }
+//    else
+//    {
+//        // fallback: plain cyan square
+//        sf::RectangleShape player(sf::Vector2f(CELL, CELL));
+//        player.setFillColor(sf::Color::Cyan);
+//        player.setPosition(PLAYER_X, playerY);
+//        window.draw(player);
+//    }
+//}
+//
+//
+//// ============================================================
+////  AUDIO
+//// ============================================================
+//
+//// Loads the music and the flip sound. Each one is optional.
+//void loadAudio()
+//{
+//    // --- music (streamed) ---
+//    hasMusic = music.openFromFile("music.ogg");
+//    if (hasMusic)
+//    {
+//        music.setLoop(true);         // repeat forever
+//        music.setVolume(40);         // 0 = silent, 100 = full
+//    }
+//
+//    // --- flip sound effect (kept in memory) ---
+//    hasFlipSound = flipBuffer.loadFromFile("flip.wav");
+//    if (hasFlipSound)
+//    {
+//        flipSound.setBuffer(flipBuffer);   // connect the sound to its data
+//        flipSound.setVolume(70);
+//    }
+//}
+//
+//void startMusic()
+//{
+//    if (hasMusic)
+//        music.play();                // play() always starts from the beginning after stop()
+//}
+//
+//void stopMusic()
+//{
+//    if (hasMusic)
+//        music.stop();
+//}
+//
+//void playFlipSound()
+//{
+//    if (hasFlipSound)
+//        flipSound.play();
+//}
 //
 //
 //int main(){
