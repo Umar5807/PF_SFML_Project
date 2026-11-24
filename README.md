@@ -1,81 +1,86 @@
-# Gravity Flip Runner
+Gravity Flip Runner
 
-A 2D endless runner game made in **C++** using the **SFML** graphics library. The player runs along a track between the floor and the ceiling and can flip gravity to switch sides, while obstacles appear at random.
+A fast-paced 2D endless arcade runner built in C++ using SFML 2.6.2. Navigate a scrolling space-station track on the lunar surface, flip gravity between the floor and ceiling to dodge incoming hazards, collect shields and bonus gems, and beat your saved high score.
 
-This is the **mid evaluation build** of our Programming Fundamentals project.
+Features
 
-## Features Completed
+Gravity-Flip Mechanics: Instantly reverse gravity mid-run to switch between the floor and ceiling lanes.
 
-- Game window (800 x 600) with a 60 FPS game loop
-- Infinite scrolling track: red floor and ceiling lines with moving yellow stripes
-- Player (cyan block) with gravity and smooth movement
-- Gravity flip between the floor and the ceiling using the spacebar
-- Random obstacle generator: obstacles appear on the floor or the ceiling after a random delay
-- Obstacles are removed from memory once they leave the screen
+Dynamic Scrolling Track: Smooth pixel-based scrolling backed by a 2D grid (track[2][21]) that progressively accelerates as you survive longer.
 
-## Controls
+Procedural Obstacles & Power-Ups:
 
-| Key | Action |
-|-----|--------|
-| Space | Flip gravity (floor <-> ceiling) |
-| Close window (X) | Exit the game |
+Orange Blocks: Hazards that end the run unless protected by a shield.
 
-## How to Run
+Blue Shield Orbs: Grants a protective energy ring that absorbs one obstacle impact.
 
-1. Install SFML (version 2.x) on your computer.
-2. Compile the code:
+Green Booster Gems: Awards +50 bonus points on pickup.
 
-```
-g++ main.cpp -o game -lsfml-graphics -lsfml-window -lsfml-system
-```
+Game States & Pause Support: Complete state flow with a keyboard-navigable Main Menu, How-to-Play Instructions screen, Pause overlay (P), and Game Over summary.
 
-3. Run the game:
+Persistent High Score: Automatically saves and loads the all-time best score using file handling (highscore.txt).
 
-```
-./game
-```
+Custom Sprites, Parallax Background & Audio: Includes a scrolling background (background.png), vertically flipping player sprite (player.png), looping background music (music.ogg), and gravity-flip sound effects (flip.wav), with built-in shape fallbacks if any optional asset is missing.
 
-On Windows, make sure the SFML libraries are linked in your IDE (for example Visual Studio or Code::Blocks) and the SFML DLL files are next to the executable.
+Controls
 
-## How the Code Works
+Key:                        Action
 
-The game runs in a loop that repeats 60 times per second. In every round it:
 
-1. Checks keyboard input (`handleEvents`)
-2. Updates the player, the stripes and the obstacles
-3. Clears the screen and draws everything again
+Up / Down Arrow:          Navigate Main Menu options
+   
+Enter:                     Select Main Menu option
 
-## Code Structure
+Space:                     Flip gravity (Floor $\leftrightarrow$ Ceiling)
 
-| Function | What it does |
-|----------|--------------|
-| `main()` | Creates the window and runs the game loop |
-| `setupGame()` | Sets the player's color and position and creates the stripes |
-| `handleEvents()` | Closes the window and flips gravity on spacebar |
-| `updateStripes()` | Moves the stripes left and loops them back to the right |
-| `drawTrack()` | Draws the red lines and yellow stripes |
-| `updatePlayer()` | Applies gravity and stops the player at the floor or ceiling |
-| `drawPlayer()` | Draws the player |
-| `spawnObstacle()` | Creates an obstacle at the right edge (floor or ceiling, chosen randomly) |
-| `updateObstacles()` | Spawns obstacles after a random delay, moves them left and removes the ones that left the screen |
-| `drawObstacles()` | Draws the obstacles as orange blocks |
+R:                         Restart immediately from the Game Over screen
 
-## Team Members and Work Division
+Esc:                        Return to the Main Menu
 
-| Member | Work |
-|--------|------|
-| **Person A: M. Umar Farooq | Main skeleton, window and game loop, shared variables, events, scrolling track (`main`, `setupGame`, `handleEvents`, `updateStripes`, `drawTrack`) |
-| **Person B: M. Hamza Kashif| Player gravity and movement (`updatePlayer`, `drawPlayer`) |
-| **Person C: Abdullah Shafique | Random obstacle generator (`spawnObstacle`, `updateObstacles`, `drawObstacles`) |
 
-## Planned Features
 
-- Collision detection with obstacles and a Game Over screen
-- Shield and score booster items
-- Score system and high score saved in a file
-- Start menu and instructions screen
-- Speed increasing over time
+Project Structure
 
-## Concepts Used
+├── Main_build.cpp              # Complete C++ source code
+├── PF_SFML_Project.exe         # Pre-built Windows executable (x64)
+├── SFML.slnx                   # Visual Studio solution file
+├── SFML.vcxproj                # Visual Studio project configuration
+├── SFML.vcxproj.filters        # Visual Studio project filters
+├── background.png              # Scrolling game background
+├── player.png                  # Player character sprite
+├── flip.wav                    # Gravity-flip sound effect
+├── music.ogg                   # Looping background music
+├── highscore.txt               # Saved high score data
+├── openal32.dll                # OpenAL audio runtime library
+└── sfml-*-2.dll                # SFML 2.6.2 runtime libraries
 
-Functions, structs, vectors, loops, random numbers (`rand()`), if/else conditions and the SFML library for graphics and input.
+
+How to Run (Pre-Built Executable)
+
+Extract the submitted .zip archive to a folder on Windows (x64).
+
+Ensure PF_SFML_Project.exe, all .dll files (sfml-*-2.dll and openal32.dll), and the asset files (background.png, player.png, flip.wav, music.ogg) remain in the same folder.
+
+Double-click PF_SFML_Project.exe to launch the game.
+
+How to Compile from Source (Visual Studio + SFML 2.6.2)
+
+Download SFML 2.6.2 matching your Visual Studio compiler version and architecture (x64).
+
+Open SFML.slnx (or SFML.vcxproj) in Visual Studio, or create an Empty C++ Project and add Main_build.cpp.
+
+Open Project Properties (Alt + F7) and configure:
+
+C/C++ $\rightarrow$ General $\rightarrow$ Additional Include Directories: <path-to-SFML-2.6.2>\include
+
+Linker $\rightarrow$ General $\rightarrow$ Additional Library Directories: <path-to-SFML-2.6.2>\lib
+
+Linker $\rightarrow$ Input $\rightarrow$ Additional Dependencies:
+
+For Debug: sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;
+
+For Release: sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;
+
+Place the matching SFML .dll files (openal32.dll and sfml-*.dll) and asset files (background.png, player.png, flip.wav, music.ogg) into your working/output directory.
+
+Build and run the project (Ctrl + F5).
