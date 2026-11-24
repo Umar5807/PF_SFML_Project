@@ -194,9 +194,13 @@
 //// Draws the actual game. Notice that Chunk 2 and Chunk 3 draw their own things.
 //void drawScreen(sf::RenderWindow& window)
 //{
-//    drawBackground(window);              // 1. background (also clears the window)
+//    drawBackground(window);              // 1. background
 //
-//    // 2. red ceiling and floor bars
+//    drawTrackObjects(window);            // 2. obstacles, shields, boosters (Chunk 3)
+//    drawPlayer(window);                  // 3. the player (Chunk 2)
+//    drawShieldRing(window);              // 4. ring around player when shielded (Chunk 3)
+//
+//    // 5. red ceiling and floor bars (drawn on top so edges stay clean)
 //    sf::RectangleShape bar(sf::Vector2f(WIN_W, 20));
 //    bar.setFillColor(sf::Color::Red);
 //    bar.setPosition(0, 40);
@@ -204,7 +208,7 @@
 //    bar.setPosition(0, 540);
 //    window.draw(bar);
 //
-//    // 3. moving yellow stripes on the bars (gives the feeling of speed)
+//    // 6. moving yellow stripes on the bars
 //    sf::RectangleShape stripe(sf::Vector2f(20, 20));
 //    stripe.setFillColor(sf::Color::Yellow);
 //    for (int i = 0; i < 9; i++)
@@ -216,17 +220,12 @@
 //        window.draw(stripe);
 //    }
 //
-//    drawTrackObjects(window);            // 4. obstacles, shields, boosters (Chunk 3)
-//    drawPlayer(window);                  // 5. the player (Chunk 2)
-//    drawShieldRing(window);              // 6. ring around player when shielded (Chunk 3)
-//
 //    // 7. HUD (score text)
 //    drawText(window, "Score: " + to_string((int)scoreF), 22, 10, 6, sf::Color::White, false);
 //    drawText(window, "Best: " + to_string(highScore), 22, WIN_W - 150, 6, sf::Color(255, 220, 0), false);
 //    if (hasShield)
 //        drawText(window, "SHIELD ON", 18, WIN_W / 2.0f, 8, sf::Color(255, 220, 0), true);
 //}
-//
 //void drawMenu(sf::RenderWindow& window, int selected)
 //{
 //    window.clear(sf::Color(20, 20, 40));
@@ -263,18 +262,6 @@
 //    drawText(window, "Best Score: " + to_string(highScore), 32, WIN_W / 2.0f, 285, sf::Color(255, 220, 0), true);
 //    drawText(window, "Press R to restart  |  ESC for menu", 24, WIN_W / 2.0f, 400, sf::Color(200, 200, 200), true);
 //}
-//// ============================================================
-////  GRAVITY FLIP RUNNER   (C++ / SFML 2.6.2)
-////
-////  ########  CHUNK 3 of 3  -  OBSTACLES, BOOSTERS, SHIELD  ########
-////  Random spawning, collision detection, and drawing of obstacles,
-////  score boosters and the shield.
-////
-////  PASTE THIS BELOW CHUNK 2 (it needs the constants and globals
-////  from Chunk 1: track, ROWS, COLS, CELL, EMPTY, OBSTACLE, SHIELD,
-////  BOOSTER, speed, scrollOffset, hasShield, gameOver, scoreF ...).
-//// ============================================================
-//
 //// How often things appear (out of 100 on every new column)
 //const int OBSTACLE_CHANCE = 30;     // 0-29  -> obstacle
 //const int SHIELD_CHANCE = 3;      // 30-32 -> shield (rare)
@@ -284,12 +271,6 @@
 //
 //// counts empty columns since the last obstacle (only Chunk 3 uses it)
 //int columnsSinceObstacle = 0;
-//
-//
-//// ============================================================
-////  SPAWNING
-//// ============================================================
-//
 //// Called when a new game starts
 //void resetPowerups()
 //{
@@ -429,26 +410,7 @@
 //    ring.setPosition(PLAYER_X + CELL / 2.0f, playerY + CELL / 2.0f);
 //    window.draw(ring);
 //}
-//// ============================================================
-////  GRAVITY FLIP RUNNER   (C++ / SFML 2.6.2)
-////
-////  ########  CHUNK 2 of 3  -  PLAYER + AUDIO  ########
-////  Player mechanics (gravity flip, movement), player sprite, and audio.
-////
-////  PASTE THIS BELOW CHUNK 1 (it needs the includes, constants and
-////  globals that Chunk 1 already declared: CELL, PLAYER_X, CEIL_Y,
-////  FLOOR_Y, playerY, velocityY, gravityDown ...).
-////
-////  FILES USED (put them in the project folder, next to the .cpp):
-////    player.png   - ONE single image of the character (not a sprite sheet)
-////    music.ogg    - background music  (.ogg or .wav ONLY - SFML 2.6.2 can't read .mp3)
-////    flip.wav     - short sound when gravity flips
-////  If a file is missing, the game still works (cyan square / no sound).
-//// ============================================================
 //
-//// ------------------------------------------------------------
-////  PLAYER PHYSICS CONSTANTS
-//// ------------------------------------------------------------
 //const float GRAVITY = 3500;    // pixels / second^2  (how hard we get pulled)
 //const float MAX_VELOCITY = 1500;    // pixels / second    (speed limit)
 //
@@ -532,34 +494,34 @@
 //{
 //    if (hasPlayerSprite)
 //    {
-//        // scale the image so it is exactly CELL x CELL pixels (40 x 40)
-//        float scaleX = (float)CELL / playerTexture.getSize().x;
-//        float scaleY = (float)CELL / playerTexture.getSize().y;
+//        const float sizeMultiplier = 2.5f;   // kept at your preferred 2.5f size
+//
+//        float scale = ((float)CELL / playerTexture.getSize().y) * sizeMultiplier;
+//        float drawWidth = playerTexture.getSize().x * scale;
+//        float drawHeight = playerTexture.getSize().y * scale;
+//        float offsetX = (CELL - drawWidth) / 2.0f;
 //
 //        if (gravityDown)
 //        {
-//            playerSprite.setScale(scaleX, scaleY);
-//            playerSprite.setPosition(PLAYER_X, playerY);
+//            playerSprite.setScale(scale, scale);
+//            playerSprite.setPosition(PLAYER_X + offsetX, (playerY + CELL) - drawHeight);
 //        }
 //        else
 //        {
-//            // a NEGATIVE y-scale flips the picture upside down;
-//            // the sprite then grows upward, so we move it down by CELL
-//            playerSprite.setScale(scaleX, -scaleY);
-//            playerSprite.setPosition(PLAYER_X, playerY + CELL);
+//            // Flip upside down and anchor top at playerY
+//            playerSprite.setScale(scale, -scale);
+//            playerSprite.setPosition(PLAYER_X + offsetX, playerY + drawHeight);
 //        }
 //        window.draw(playerSprite);
 //    }
 //    else
 //    {
-//        // fallback: plain cyan square
 //        sf::RectangleShape player(sf::Vector2f(CELL, CELL));
 //        player.setFillColor(sf::Color::Cyan);
 //        player.setPosition(PLAYER_X, playerY);
 //        window.draw(player);
 //    }
 //}
-//
 //
 //// ============================================================
 ////  AUDIO
