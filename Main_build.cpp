@@ -267,8 +267,8 @@ void drawGameOver(sf::RenderWindow& window)
     drawText(window, "Press R to restart  |  ESC for menu", 24, WIN_W / 2.0f, 400, sf::Color(200, 200, 200), true);
 }
 // how often things appear 
-const int OBSTACLE_CHANCE = 30;     // 0-29  -> obstacle
-const int SHIELD_CHANCE = 3;      // 30-32 -> shield (rare)
+const int OBSTACLE_CHANCE = 35;     // 0-29  -> obstacle
+const int SHIELD_CHANCE = 2.5;      // 30-32 -> shield (rare)
 const int BOOSTER_CHANCE = 8;      // 33-40 -> score booster
 
 const int   BOOSTER_POINTS = 50;    // bonus points for one booster
