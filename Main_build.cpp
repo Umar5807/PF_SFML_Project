@@ -65,16 +65,14 @@
 //void drawTrackObjects(sf::RenderWindow& window);
 //void drawShieldRing(sf::RenderWindow& window);
 //
-//void clearTrack()
-//{
+//void clearTrack(){
 //    for (int r = 0; r < ROWS; r++)
 //        for (int c = 0; c < COLS; c++)
 //            track[r][c] = EMPTY;
 //}
-//// Moves every column one step LEFT (nested loops), then asks Chunk 3's
-//// spawnColumn() to create a fresh column on the right edge.
-//void shiftTrack()
-//{
+///* Moves every column one step LEFT(nested loops), then asks
+// spawnColumn() to create a fresh column on the right edge*/
+//void shiftTrack(){
 //    for (int r = 0; r < ROWS; r++)
 //        for (int c = 0; c < COLS - 1; c++)
 //            track[r][c] = track[r][c + 1];
@@ -192,8 +190,7 @@
 //    window.draw(text);
 //}
 //// Draws the actual game. Notice that Chunk 2 and Chunk 3 draw their own things.
-//void drawScreen(sf::RenderWindow& window)
-//{
+//void drawScreen(sf::RenderWindow& window){
 //    drawBackground(window);              // 1. background
 //
 //    drawTrackObjects(window);            // 2. obstacles, shields, boosters (Chunk 3)
@@ -211,8 +208,7 @@
 //    // 6. moving yellow stripes on the bars
 //    sf::RectangleShape stripe(sf::Vector2f(20, 20));
 //    stripe.setFillColor(sf::Color::Yellow);
-//    for (int i = 0; i < 9; i++)
-//    {
+//    for (int i = 0; i < 9; i++){
 //        float x = i * 100 - stripeOffset;
 //        stripe.setPosition(x, 40);
 //        window.draw(stripe);
@@ -226,8 +222,7 @@
 //    if (hasShield)
 //        drawText(window, "SHIELD ON", 18, WIN_W / 2.0f, 8, sf::Color(255, 220, 0), true);
 //}
-//void drawMenu(sf::RenderWindow& window, int selected)
-//{
+//void drawMenu(sf::RenderWindow& window, int selected){
 //    window.clear(sf::Color(20, 20, 40));
 //    drawText(window, "GRAVITY FLIP RUNNER", 48, WIN_W / 2.0f, 90, sf::Color::Cyan, true);
 //
@@ -242,8 +237,7 @@
 //    drawText(window, "Best score: " + to_string(highScore), 22, WIN_W / 2.0f, 500, sf::Color(180, 180, 180), true);
 //}
 //
-//void drawInstructions(sf::RenderWindow& window)
-//{
+//void drawInstructions(sf::RenderWindow& window){
 //    window.clear(sf::Color(20, 20, 40));
 //    drawText(window, "HOW TO PLAY", 40, WIN_W / 2.0f, 60, sf::Color::Cyan, true);
 //    drawText(window, "SPACE  -  flip gravity (floor <-> ceiling)", 24, WIN_W / 2.0f, 160, sf::Color::White, true);
@@ -254,8 +248,7 @@
 //    drawText(window, "Press ESC to go back", 20, WIN_W / 2.0f, 500, sf::Color(180, 180, 180), true);
 //}
 //
-//void drawGameOver(sf::RenderWindow& window)
-//{
+//void drawGameOver(sf::RenderWindow& window){
 //    window.clear(sf::Color(30, 10, 10));
 //    drawText(window, "GAME OVER", 56, WIN_W / 2.0f, 110, sf::Color(255, 70, 70), true);
 //    drawText(window, "Final Score: " + to_string((int)scoreF), 32, WIN_W / 2.0f, 230, sf::Color::White, true);
@@ -278,9 +271,9 @@
 //    columnsSinceObstacle = 0;
 //}
 //
-//// Fills the LAST column of the track array randomly.
-//// The gap between obstacles grows with speed, so the player always
-//// has enough time to flip to the other side.
+//// fills the last column of the track array randomly.
+///* the gap between obstacles grows with speed so the player always
+// has enough time to flip to the other side.*/
 //void spawnColumn()
 //{
 //    track[0][COLS - 1] = EMPTY;
@@ -304,8 +297,7 @@
 //}
 ////  COLLISIONS
 //// Compares the player's rectangle with every object on the track.
-//void checkCollisions()
-//{
+//void checkCollisions(){
 //    const float margin = 6;     // Small Margin if the Player hits the Obstacles slightly then there is no 
 //
 //    // the player's hitbox (a slightly smaller rectangle)
@@ -397,8 +389,7 @@
 //}
 //
 //// Yellow ring around the player while the shield is active
-//void drawShieldRing(sf::RenderWindow& window)
-//{
+//void drawShieldRing(sf::RenderWindow& window){
 //    if (!hasShield)
 //        return;
 //
@@ -414,9 +405,6 @@
 //const float GRAVITY = 3500;    // pixels / second^2  (how hard we get pulled)
 //const float MAX_VELOCITY = 1500;    // pixels / second    (speed limit)
 //
-//// ------------------------------------------------------------
-////  PLAYER SPRITE + AUDIO OBJECTS  (only Chunk 2 uses these)
-//// ------------------------------------------------------------
 //sf::Texture playerTexture;          // the image in memory
 //sf::Sprite  playerSprite;           // what we draw on screen
 //bool        hasPlayerSprite = false;
@@ -426,12 +414,6 @@
 //sf::Sound       flipSound;          // the "speaker" that plays flipBuffer
 //bool hasMusic = false;
 //bool hasFlipSound = false;
-//
-//
-//// ============================================================
-////  PLAYER MECHANICS
-//// ============================================================
-//
 //// Puts the player back on the floor for a new run
 //void resetPlayer()
 //{
@@ -474,14 +456,8 @@
 //    }
 //}
 //
-//
-//// ============================================================
-////  PLAYER SPRITE
-//// ============================================================
-//
 //// Tries to load player.png. Missing file = we draw a cyan square instead.
-//void loadPlayerAssets()
-//{
+//void loadPlayerAssets(){
 //    if (playerTexture.loadFromFile("player.png"))
 //    {
 //        hasPlayerSprite = true;
@@ -522,11 +498,6 @@
 //        window.draw(player);
 //    }
 //}
-//
-//// ============================================================
-////  AUDIO
-//// ============================================================
-//
 //// Loads the music and the flip sound. Each one is optional.
 //void loadAudio()
 //{
@@ -559,13 +530,10 @@
 //        music.stop();
 //}
 //
-//void playFlipSound()
-//{
+//void playFlipSound(){
 //    if (hasFlipSound)
 //        flipSound.play();
 //}
-//
-//
 //int main(){
 //    srand((unsigned)time(0));            // different random map every run
 //
@@ -586,12 +554,11 @@
 //
 //    while (window.isOpen())
 //    {
-//        // dt = seconds since the last frame. Using dt makes the game run at
-//        // the same speed on slow and fast computers.
+//        // dt = seconds since the last frame.Using dt makes the game run at the same speed on slow and fast computers
 //        float dt = clock.restart().asSeconds();
 //        if (dt > 0.05f) dt = 0.05f;      // safety: avoid huge jumps after lag
 //
-//        // ---------- 1. EVENTS (keyboard / window) ----------
+//        // EVENTS keyboard / window
 //        sf::Event event;
 //        while (window.pollEvent(event))
 //        {
